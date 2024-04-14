@@ -90,6 +90,10 @@
                       <v n="Id">2597686782L</v>
                       <v n="Value">false</v>
                     </o>
+                    <o>
+                      <v n="Id">743958181L</v>
+                      <v n="Value">"MAIN.bStartStop"</v>
+                    </o>
                   </l>
                 </o>
                 <v n="VisualElementName">"PushSwitch"</v>
