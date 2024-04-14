@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_SquareWaveGenerator" Id="{6452d076-6004-436e-b7a3-d2fccf49a044}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK PUBLIC FB_SquareWaveGenerator
+VAR_INPUT
+	bStartStop : BOOL;
+	tHighTime : TIME := T#1S;
+	tLowTime : TIME := T#1S;
+END_VAR
+VAR_OUTPUT
+	bOutPulse: BOOL;
+END_VAR
+VAR
+	fbTON : TON;
+	eState: (NotStarted, Started);
+	bTimerState: BOOL := FALSE;
+	tDuration: TIME := tHighTime;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbTON (IN:= bTimerState, PT:= tDuration);
+
+CASE eState OF
+	NotStarted:
+		IF bStartStop THEN
+			Start();
+		END_IF
+		
+	Started:
+		IF fbTON.Q THEN
+			Toggle();
+		END_IF
+		
+		IF NOT bStartStop THEN
+			Stop();
+		END_IF
+END_CASE
+]]></ST>
+    </Implementation>
+    <Method Name="Start" Id="{43b738a1-9377-4cc1-bbc2-828c1103e206}">
+      <Declaration><![CDATA[METHOD PRIVATE Start : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eState := Started;
+bOutPulse := TRUE;
+
+tDuration := tHighTime;
+bTimerState := TRUE;
+
+Start := TRUE;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Stop" Id="{bcb8da47-83cb-4b1a-96db-f8fa3688803e}">
+      <Declaration><![CDATA[METHOD PRIVATE Stop : BOOL
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbTON (IN := FALSE);
+
+bTimerState := FALSE;
+eState := NotStarted;
+bOutPulse := FALSE;
+
+Stop := TRUE;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Toggle" Id="{2b07978b-68a6-4604-bc08-7ef2614c5010}">
+      <Declaration><![CDATA[METHOD PRIVATE Toggle : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbTON (IN := FALSE);
+
+bOutPulse := NOT bOutPulse;
+IF bOutPulse THEN
+	tDuration := tHighTime;
+ELSE
+	tDuration := tLowTime;
+END_IF
+bTimerState := TRUE;
+
+Toggle := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_SquareWaveGenerator">
+      <LineId Id="15" Count="4" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="25" Count="3" />
+      <LineId Id="53" Count="0" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="54" Count="0" />
+      <LineId Id="39" Count="0" />
+      <LineId Id="52" Count="0" />
+      <LineId Id="45" Count="1" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SquareWaveGenerator.Start">
+      <LineId Id="6" Count="5" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="12" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SquareWaveGenerator.Stop">
+      <LineId Id="6" Count="5" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="12" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SquareWaveGenerator.Toggle">
+      <LineId Id="6" Count="9" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

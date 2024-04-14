@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MAIN" Id="{de9791fb-a451-4f8e-9bb5-6b40ceb12777}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	bStartStop: BOOL := FALSE;
+	bPulse: BOOL := FALSE;
+	
+	fbSWG : FB_SquareWaveGenerator;
+END_VAR
+VAR CONSTANT
+	HIGHTIME : TIME := T#2S;
+	LOWTIME : TIME := T#3S;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbSWG(
+	bStartStop := bStartStop, 
+	tHighTime := HIGHTIME,
+	tLowTime := LOWTIME,
+	bOutPulse => bPulse);
+	
+]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="8" Count="0" />
+      <LineId Id="117" Count="5" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
