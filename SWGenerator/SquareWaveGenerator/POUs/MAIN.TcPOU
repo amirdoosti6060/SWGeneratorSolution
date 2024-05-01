@@ -5,6 +5,7 @@
 VAR
 	bStartStop: BOOL := FALSE;
 	bPulse: BOOL := FALSE;
+	nCounter: UINT := 0;
 	
 	fbSWG : FB_SquareWaveGenerator;
 END_VAR
@@ -13,7 +14,11 @@ VAR CONSTANT
 	LOWTIME : TIME := T#3S;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[fbSWG(
+      <ST><![CDATA[IF bStartStop THEN
+	nCounter := nCounter + 1;
+END_IF
+
+fbSWG(
 	bStartStop := bStartStop, 
 	tHighTime := HIGHTIME,
 	tLowTime := LOWTIME,
@@ -22,6 +27,8 @@ END_VAR]]></Declaration>
 ]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
+      <LineId Id="134" Count="2" />
+      <LineId Id="138" Count="0" />
       <LineId Id="8" Count="0" />
       <LineId Id="117" Count="5" />
     </LineIds>
